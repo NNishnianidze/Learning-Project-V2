@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\AbstractApi;
 
 use App\Contracts\EmailValidationInterface;
+use App\DTO\EmailValidationResult;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use App\RetryMiddleware;
@@ -17,7 +18,7 @@ class EmailValidationService implements EmailValidationInterface
     {
     }
 
-    public function verify(string $email): array
+    public function verify(string $email): EmailValidationResult
     {
         $stack = HandlerStack::create();
 
@@ -40,6 +41,8 @@ class EmailValidationService implements EmailValidationInterface
 
         $response = $client->get('', ['query' => $params]);
 
-        return json_decode($response->getBody()->getContents(), true);
+        $body = json_decode($response->getBody()->getContents(), true);
+
+        return new EmailValidationResult((int) ($body['quality_score'] * 100), $body['deliverability'] === 'DELIVARABLE');
     }
 }

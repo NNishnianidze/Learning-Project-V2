@@ -6,7 +6,6 @@ namespace App;
 
 use App\Contracts\EmailValidationInterface;
 use App\Exceptions\RouteNotFoundException;
-use App\Services\AbstractApi\EmailValidationService;
 use Dotenv\Dotenv;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -19,6 +18,7 @@ class App
 
     public function __construct(
         protected Container $container,
+        protected RetryMiddleware $middleware,
         protected ?Router $router = null,
         protected array $request = [],
     ) {
@@ -44,9 +44,13 @@ class App
         $this->initDb($this->config->db);
 
         $this->container->bind(MailerInterface::class, fn () => new CustomMailer($this->config->mailer['dsn']));
+        // $this->container->bind(
+        //     EmailValidationInterface::class,
+        //     fn () => new Services\Emailable\EmailValidationService($this->config->apiKeys['emailable'], $this->middleware)
+        // );
         $this->container->bind(
             EmailValidationInterface::class,
-            fn () => new EmailValidationService($this->config->apiKeys['abstract_api_email_validation'], new RetryMiddleware)
+            fn () => new Services\AbstractApi\EmailValidationService($this->config->apiKeys['abstract_api_email_validation'], $this->middleware)
         );
 
         return $this;

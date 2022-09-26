@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use App\App;
 use App\Controllers\CurlController;
 use App\Controllers\HomeController;
 use App\Controllers\InvoiceController;
+use App\RetryMiddleware;
 use App\Router;
 use Illuminate\Container\Container;
 
@@ -16,6 +17,7 @@ define('VIEW_PATH', __DIR__ . '/../views');
 
 $container = new Container();
 $router    = new Router($container);
+$middleware = new RetryMiddleware;
 
 $router->registerRoutesFromControllerAttributes(
     [
@@ -27,6 +29,7 @@ $router->registerRoutesFromControllerAttributes(
 
 (new App(
     $container,
+    $middleware,
     $router,
     ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']]
 ))->boot()->run();
