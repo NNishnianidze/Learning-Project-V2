@@ -9,6 +9,8 @@ Main Langugae: PHP
 Using: MySQL, NGNIX, Docker, Composer
 
 Practiced:
-✅ Cron ✅ Eloquent ✅ ORM ✅ Doctrine Migration ✅ cURL
+✅ Cron ✅ Eloquent ✅ ORM ✅ Doctrine Migration ✅ cURL ✅ Guzzle
 
-Implemented 'Emailable' API test request with cUrl
+Implemented 'Emailable' API test request with cURL
+
+Refactored cURL to Guzzle 
