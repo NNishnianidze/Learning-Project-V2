@@ -6,7 +6,6 @@ use App\App;
 use App\Controllers\CurlController;
 use App\Controllers\HomeController;
 use App\Controllers\InvoiceController;
-use App\RetryMiddleware;
 use App\Router;
 use Illuminate\Container\Container;
 
