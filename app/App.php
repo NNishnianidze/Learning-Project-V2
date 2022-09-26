@@ -18,7 +18,6 @@ class App
 
     public function __construct(
         protected Container $container,
-        protected RetryMiddleware $middleware,
         protected ?Router $router = null,
         protected array $request = [],
     ) {
@@ -44,13 +43,16 @@ class App
         $this->initDb($this->config->db);
 
         $this->container->bind(MailerInterface::class, fn () => new CustomMailer($this->config->mailer['dsn']));
+
+        $middleware = new RetryMiddleware;
+
         // $this->container->bind(
         //     EmailValidationInterface::class,
-        //     fn () => new Services\Emailable\EmailValidationService($this->config->apiKeys['emailable'], $this->middleware)
+        //     fn () => new Services\Emailable\EmailValidationService($this->config->apiKeys['emailable'], $middleware)
         // );
         $this->container->bind(
             EmailValidationInterface::class,
-            fn () => new Services\AbstractApi\EmailValidationService($this->config->apiKeys['abstract_api_email_validation'], $this->middleware)
+            fn () => new Services\AbstractApi\EmailValidationService($this->config->apiKeys['abstract_api_email_validation'], $middleware)
         );
 
         return $this;

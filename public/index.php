@@ -17,7 +17,6 @@ define('VIEW_PATH', __DIR__ . '/../views');
 
 $container = new Container();
 $router    = new Router($container);
-$middleware = new RetryMiddleware;
 
 $router->registerRoutesFromControllerAttributes(
     [
@@ -29,7 +28,6 @@ $router->registerRoutesFromControllerAttributes(
 
 (new App(
     $container,
-    $middleware,
     $router,
     ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']]
 ))->boot()->run();
