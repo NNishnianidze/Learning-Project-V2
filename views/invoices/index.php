@@ -5,7 +5,8 @@
         text-align: center;
     }
 
-    table tr th, table tr td {
+    table tr th,
+    table tr td {
         border: 1px #eee solid;
         padding: 5px;
     }
@@ -32,16 +33,18 @@
             <th>Invoice #</th>
             <th>Amount</th>
             <th>Status</th>
+            <th>Due Date</th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($invoices as $invoice): ?>
+        <?php foreach ($invoices as $invoice) : ?>
             <tr>
                 <td><?= $invoice['invoice_number'] ?></td>
                 <td>$<?= number_format($invoice['amount'], 2) ?></td>
                 <td class="<?= \App\Enums\InvoiceStatus::tryFrom($invoice['status'])->color()->getClass() ?>">
-                    <?= \App\Enums\InvoiceStatus::tryFrom($invoice['status'])->toString() ?>
+                    <?= \App\Enums\InvoiceStatus::from($invoice['status'])->toString() ?>
                 </td>
+                <td><?= $invoice['due_date']->format('m/d/Y') ?></td>
             </tr>
         <?php endforeach ?>
     </tbody>

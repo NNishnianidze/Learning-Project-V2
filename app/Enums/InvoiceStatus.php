@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -13,7 +13,7 @@ enum InvoiceStatus: int
 
     public function toString(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Paid   => 'Paid',
             self::Failed => 'Declined',
             self::Void   => 'Void',
@@ -23,7 +23,7 @@ enum InvoiceStatus: int
 
     public function color(): Color
     {
-        return match($this) {
+        return match ($this) {
             self::Paid   => Color::Green,
             self::Failed => Color::Red,
             self::Void   => Color::Gray,
@@ -33,7 +33,7 @@ enum InvoiceStatus: int
 
     public static function fromColor(Color $color): InvoiceStatus
     {
-        return match($color) {
+        return match ($color) {
             Color::Green => self::Paid,
             Color::Gray  => self::Void,
             Color::Red   => self::Failed,

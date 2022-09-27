@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int           $id
  * @property string        $invoice_number
  * @property float         $amount
- * @property InvoiceStatus $status
+ * @property int           $status
  * @property Carbon        $created_at
  * @property Carbon        $due_date
  *
@@ -27,12 +27,12 @@ class Invoice extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'due_date'   => 'datetime',
-        'status'     => InvoiceStatus::class,
+        'status'     => 'int',
     ];
 
     protected static function booted()
     {
-        static::creating(function(Invoice $invoice) {
+        static::creating(function (Invoice $invoice) {
             if ($invoice->isClean('due_date')) {
                 $invoice->due_date = (new Carbon())->addDays(10);
             }

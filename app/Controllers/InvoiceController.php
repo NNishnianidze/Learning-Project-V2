@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controllers;
 
@@ -15,7 +15,7 @@ class InvoiceController
     #[Get('/invoices')]
     public function index(): View
     {
-        $invoices = Invoice::query()->where('status', InvoiceStatus::Paid)->get();
+        $invoices = Invoice::query()->where('status', InvoiceStatus::Pending)->get();
 
         return View::make('invoices/index', ['invoices' => $invoices]);
     }
@@ -27,7 +27,7 @@ class InvoiceController
 
         $invoice->invoice_number = 5;
         $invoice->amount         = 20;
-        $invoice->status         = InvoiceStatus::Pending;
+        $invoice->status         = InvoiceStatus::Pending->value;
         $invoice->due_date       = (new Carbon())->addDay();
 
         $invoice->save();
