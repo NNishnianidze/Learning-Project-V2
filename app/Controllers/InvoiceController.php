@@ -9,15 +9,31 @@ use App\Enums\InvoiceStatus;
 use App\Models\Invoice;
 use App\View;
 use Carbon\Carbon;
+use Twig\Environment as Twig;
 
 class InvoiceController
 {
-    #[Get('/invoices')]
-    public function index(): View
+    public function __construct(private Twig $twig)
     {
-        $invoices = Invoice::query()->where('status', InvoiceStatus::Pending)->get();
+    }
 
-        return View::make('invoices/index', ['invoices' => $invoices]);
+    #[Get('/invoices')]
+    public function index(): string
+    {
+        $invoices = Invoice::query()
+            ->where('status', InvoiceStatus::Paid)
+            ->get()
+            ->map(
+                fn (Invoice $invoice) => [
+                    'invoiceNumber' => $invoice->invoice_number,
+                    'amount'        => $invoice->amount,
+                    'status'        => $invoice->status->toString(),
+                    'dueDate'       => $invoice->due_date->toDateTimeString(),
+                ]
+            )
+            ->toArray();
+
+        return $this->twig->render('invoices/index.twig', ['invoices' => $invoices]);
     }
 
     #[Get('/invoices/new')]
@@ -25,9 +41,9 @@ class InvoiceController
     {
         $invoice = new Invoice();
 
-        $invoice->invoice_number = 5;
-        $invoice->amount         = 20;
-        $invoice->status         = InvoiceStatus::Pending->value;
+        $invoice->invoice_number = 2;
+        $invoice->amount         = 35;
+        $invoice->status         = InvoiceStatus::Paid;
         $invoice->due_date       = (new Carbon())->addDay();
 
         $invoice->save();

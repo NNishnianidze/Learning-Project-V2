@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int           $id
  * @property string        $invoice_number
  * @property float         $amount
- * @property int           $status
+ * @property InvoiceStatus $status
  * @property Carbon        $created_at
  * @property Carbon        $due_date
  *
@@ -27,7 +27,7 @@ class Invoice extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'due_date'   => 'datetime',
-        'status'     => 'int',
+        'status'     => InvoiceStatus::class,
     ];
 
     protected static function booted()
